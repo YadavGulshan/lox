@@ -78,7 +78,21 @@ public class Scanner {
             case ' ', '\r', '\t' -> { /* Ignore whitespace. */ }
             case '\n' -> line++;
 
-            case '"' -> string();
+            case '"' -> {
+                // """ multiline comment """
+                if (peek() == '"' && peekNext() == '"' && !isAtEnd()) {
+                    System.out.println("multiline comment");
+                    advance();
+                    advance();
+                    while (peek() != '"' && !isAtEnd()) advance();
+                    if (peek() == '"' && peekNext() == '"') {
+                        advance();
+                        advance();
+                    }
+                } else {
+                    string();
+                }
+            }
             case 'o' -> {
                 if (match('r')) addToken(TokenType.OR);
             }
